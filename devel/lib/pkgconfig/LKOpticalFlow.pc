@@ -1,0 +1,8 @@
+prefix=/home/chinghaomeng/LK_Optical_Flow/devel
+
+Name: LKOpticalFlow
+Description: Description of LKOpticalFlow
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
