@@ -2,4 +2,4 @@
 source_root_dir = "/home/chinghaomeng/LK_Optical_Flow/src"
 whitelisted_packages = "".split(';') if "" != "" else []
 blacklisted_packages = "".split(';') if "" != "" else []
-underlay_workspaces = "/home/chinghaomeng/realsense_ws/devel;/opt/ros/kinetic".split(';') if "/home/chinghaomeng/realsense_ws/devel;/opt/ros/kinetic" != "" else []
+underlay_workspaces = "/home/chinghaomeng/LK_Optical_Flow/devel;/home/chinghaomeng/realsense_ws/devel;/opt/ros/kinetic".split(';') if "/home/chinghaomeng/LK_Optical_Flow/devel;/home/chinghaomeng/realsense_ws/devel;/opt/ros/kinetic" != "" else []

@@ -1,4 +1,5 @@
 #include <ros/ros.h>
+#include<vector>
 #include <librealsense2/rs.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/video/video.hpp>
@@ -29,11 +30,12 @@ private:
     // Mat initial;    // 初始化跟蹤點的位置
     // Mat features;   // 檢測的特徵
     /****************************************/
-    int maxCount = 500; // 檢測的最大特徵數
-    double qLevel = 0.01;   // 特徵檢測的等級
-    double minDist = 10.0;  // 兩特徵點之間的最小距離
+    int maxCount = 500; // 檢測的最大角點數目
+    double qLevel = 0.01;   // 特徵檢測的等級（一般於0.01-0.1之間）
+    double minDist = 10.0;  // 兩特徵點之間的最小距離，小於此距離的點要被忽略
     vector<uchar> status;   // 跟蹤特徵的狀態，特徵的流發現為1，否則為0
     vector<float> err;
+    double deltaDist;
     int count = 0;
 
 public:
@@ -106,36 +108,56 @@ void LK_OpticalFlow::Tracking(Mat &frame, Mat &output)
     if (AddNewPoints())
     {
         //角點檢測
+            //image:輸入圖像(gray)
+            //corners:輸出角點vector(features)
+            //maxCorners:檢測的最大角點數目(maxCount)
+            //qualityLevel:特徵檢測的等級,一般於0.01-0.1之間(qLevel)
+            //minDistance:兩特徵點之間的最小距離，小於此距離的點要被忽略(minDist)
         goodFeaturesToTrack(gray, features, maxCount, qLevel, minDist);
+        // cout << "============features vector============" << endl;
+        // cout << "features : " << features << endl;
+        // cout << "====================================\n" << endl;
+
         points[0].insert(points[0].end(), features.begin(), features.end());
+        // cout << "============points[0] vector============" << endl;
+        // cout << "points[0] : " << points[0] << endl;
+        // cout << "====================================\n" << endl;
+        
         initial.insert(initial.end(), features.begin(), features.end());
+        // cout << "============initial vector============" << endl;
+        // cout << "initial : " << initial << endl;
+        // cout << "====================================\n" << endl;
+
     }
-    cout << "============addNewPoints============" << endl;
-    cout << "points[0] : " << points[0] << endl;
-    cout << "points[1] : " << points[1] << endl;
-    cout << "initial : " << initial << endl;
-    cout << "------------------------------------" << endl;
-    cout << "points[0].size() : " << points[0].size() << endl;
-    cout << "points[1].size() : " << points[1].size() << endl;
-    cout << "initial.size() : " << initial.size() << endl;
-    cout << "====================================\n" << endl;
+    
     if (gray_prev.empty())
-    {
+    {   
+        // cout << gray_prev <<endl;
         gray.copyTo(gray_prev);
     }
     // LK-光流法運動估計
+        //prevImg:計算光流的前一偵圖片(gray_prev）
+        //nextImg:下一偵圖片(gray)
+        //prevPts:前一偵圖片中的特徵點（角點）,
+        //nextPts:輸出特徵點於下一偵圖片的新位置
+        //status:若兩偵之間的特徵點有發生變化（有光流法現象）則為1，否則為0
+        //err:兩偵之間特徵點位置的誤差
     calcOpticalFlowPyrLK(gray_prev, gray, points[0], points[1], status, err);
 
     // 去掉一些不好的特徵點
     int k = 0;
     for (size_t i=0; i<points[1].size(); i++)
     {
+        // cout << "points[1][" << i <<"]:" << points[1][i] << endl;
         if (AcceptTrackedPoint(i))
         {
+            // printf("%hhu\n",status[i]);
+            // cout << deltaDist <<endl;
             initial[k] = initial[i];
-            points[1][k++] = points[1][i];
+            points[1][k++] = points[1][i];            
         }
-    
+        // cout << "k_points[1][" << k++ << "]:" << points[1][k++] << endl;
+        // cout <<endl;
     }
     points[1].resize(k);
     initial.resize(k);
@@ -170,7 +192,8 @@ bool LK_OpticalFlow::AddNewPoints()
 //决定哪些跟蹤點被接受
 bool LK_OpticalFlow::AcceptTrackedPoint(int i)
 {
-    return status[i] && ((abs(points[0][i].x - points[1][i].x) + abs(points[0][i].y - points[1][i].y)) > 2);
+    deltaDist = abs(points[0][i].x - points[1][i].x) + abs(points[0][i].y - points[1][i].y);
+    return status[i] && deltaDist > 2;
 }
 
 int main(int argc, char** argv)

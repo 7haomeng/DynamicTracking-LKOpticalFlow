@@ -136,6 +136,9 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/LKOpticalFlow_node.cpp)
 
+add_executable(tst src/tst.cpp)
+target_link_libraries(tst ${catkin_LIBRARIES})
+
 add_executable(LK_OpticalFlow src/LK_OpticalFlow.cpp)
 target_link_libraries(LK_OpticalFlow ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${realsense2_LIBRARY})
 

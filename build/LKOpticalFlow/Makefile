@@ -78,17 +78,6 @@ install/fast: preinstall/fast
 	/usr/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/cmake-gui -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -110,6 +99,17 @@ test:
 test/fast: test
 
 .PHONY : test/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/bin/cmake-gui -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
 
 # Special rule for the target install/strip
 install/strip: preinstall
@@ -420,6 +420,21 @@ std_msgs_generate_messages_lisp/fast:
 	cd /home/chinghaomeng/LK_Optical_Flow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make LKOpticalFlow/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
 .PHONY : std_msgs_generate_messages_lisp/fast
 
+# Convenience name for target.
+LKOpticalFlow/CMakeFiles/tst.dir/rule:
+	cd /home/chinghaomeng/LK_Optical_Flow/build && $(MAKE) -f CMakeFiles/Makefile2 LKOpticalFlow/CMakeFiles/tst.dir/rule
+.PHONY : LKOpticalFlow/CMakeFiles/tst.dir/rule
+
+# Convenience name for target.
+tst: LKOpticalFlow/CMakeFiles/tst.dir/rule
+
+.PHONY : tst
+
+# fast build rule for target.
+tst/fast:
+	cd /home/chinghaomeng/LK_Optical_Flow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/tst.dir/build.make LKOpticalFlow/CMakeFiles/tst.dir/build
+.PHONY : tst/fast
+
 src/LK_OpticalFlow.o: src/LK_OpticalFlow.cpp.o
 
 .PHONY : src/LK_OpticalFlow.o
@@ -474,6 +489,33 @@ src/LK_OpticalFlow_v2.cpp.s:
 	cd /home/chinghaomeng/LK_Optical_Flow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/LK_OpticalFlow_v2.dir/build.make LKOpticalFlow/CMakeFiles/LK_OpticalFlow_v2.dir/src/LK_OpticalFlow_v2.cpp.s
 .PHONY : src/LK_OpticalFlow_v2.cpp.s
 
+src/tst.o: src/tst.cpp.o
+
+.PHONY : src/tst.o
+
+# target to build an object file
+src/tst.cpp.o:
+	cd /home/chinghaomeng/LK_Optical_Flow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/tst.dir/build.make LKOpticalFlow/CMakeFiles/tst.dir/src/tst.cpp.o
+.PHONY : src/tst.cpp.o
+
+src/tst.i: src/tst.cpp.i
+
+.PHONY : src/tst.i
+
+# target to preprocess a source file
+src/tst.cpp.i:
+	cd /home/chinghaomeng/LK_Optical_Flow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/tst.dir/build.make LKOpticalFlow/CMakeFiles/tst.dir/src/tst.cpp.i
+.PHONY : src/tst.cpp.i
+
+src/tst.s: src/tst.cpp.s
+
+.PHONY : src/tst.s
+
+# target to generate assembly for a file
+src/tst.cpp.s:
+	cd /home/chinghaomeng/LK_Optical_Flow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/tst.dir/build.make LKOpticalFlow/CMakeFiles/tst.dir/src/tst.cpp.s
+.PHONY : src/tst.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -482,13 +524,12 @@ help:
 	@echo "... depend"
 	@echo "... list_install_components"
 	@echo "... install"
+	@echo "... rebuild_cache"
 	@echo "... std_msgs_generate_messages_py"
 	@echo "... LK_OpticalFlow"
 	@echo "... roscpp_generate_messages_py"
 	@echo "... rosgraph_msgs_generate_messages_eus"
-	@echo "... edit_cache"
 	@echo "... rosgraph_msgs_generate_messages_nodejs"
-	@echo "... rebuild_cache"
 	@echo "... roscpp_generate_messages_cpp"
 	@echo "... rosgraph_msgs_generate_messages_cpp"
 	@echo "... std_msgs_generate_messages_cpp"
@@ -502,6 +543,8 @@ help:
 	@echo "... roscpp_generate_messages_lisp"
 	@echo "... std_msgs_generate_messages_eus"
 	@echo "... std_msgs_generate_messages_lisp"
+	@echo "... edit_cache"
+	@echo "... tst"
 	@echo "... install/strip"
 	@echo "... install/local"
 	@echo "... src/LK_OpticalFlow.o"
@@ -510,6 +553,9 @@ help:
 	@echo "... src/LK_OpticalFlow_v2.o"
 	@echo "... src/LK_OpticalFlow_v2.i"
 	@echo "... src/LK_OpticalFlow_v2.s"
+	@echo "... src/tst.o"
+	@echo "... src/tst.i"
+	@echo "... src/tst.s"
 .PHONY : help
 
 

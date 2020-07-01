@@ -392,6 +392,7 @@ clean: gtest/gtest/CMakeFiles/gtest_main.dir/clean
 # Convenience name for "all" pass in the directory.
 LKOpticalFlow/all: LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir/all
 LKOpticalFlow/all: LKOpticalFlow/CMakeFiles/LK_OpticalFlow_v2.dir/all
+LKOpticalFlow/all: LKOpticalFlow/CMakeFiles/tst.dir/all
 
 .PHONY : LKOpticalFlow/all
 
@@ -413,6 +414,7 @@ LKOpticalFlow/clean: LKOpticalFlow/CMakeFiles/std_msgs_generate_messages_nodejs.
 LKOpticalFlow/clean: LKOpticalFlow/CMakeFiles/roscpp_generate_messages_lisp.dir/clean
 LKOpticalFlow/clean: LKOpticalFlow/CMakeFiles/std_msgs_generate_messages_eus.dir/clean
 LKOpticalFlow/clean: LKOpticalFlow/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean
+LKOpticalFlow/clean: LKOpticalFlow/CMakeFiles/tst.dir/clean
 
 .PHONY : LKOpticalFlow/clean
 
@@ -972,6 +974,43 @@ LKOpticalFlow/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean:
 
 # clean rule for target.
 clean: LKOpticalFlow/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target LKOpticalFlow/CMakeFiles/tst.dir
+
+# All Build rule for target.
+LKOpticalFlow/CMakeFiles/tst.dir/all:
+	$(MAKE) -f LKOpticalFlow/CMakeFiles/tst.dir/build.make LKOpticalFlow/CMakeFiles/tst.dir/depend
+	$(MAKE) -f LKOpticalFlow/CMakeFiles/tst.dir/build.make LKOpticalFlow/CMakeFiles/tst.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/chinghaomeng/LK_Optical_Flow/build/CMakeFiles --progress-num=16,17 "Built target tst"
+.PHONY : LKOpticalFlow/CMakeFiles/tst.dir/all
+
+# Include target in all.
+all: LKOpticalFlow/CMakeFiles/tst.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+LKOpticalFlow/CMakeFiles/tst.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/chinghaomeng/LK_Optical_Flow/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 LKOpticalFlow/CMakeFiles/tst.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/chinghaomeng/LK_Optical_Flow/build/CMakeFiles 0
+.PHONY : LKOpticalFlow/CMakeFiles/tst.dir/rule
+
+# Convenience name for target.
+tst: LKOpticalFlow/CMakeFiles/tst.dir/rule
+
+.PHONY : tst
+
+# clean rule for target.
+LKOpticalFlow/CMakeFiles/tst.dir/clean:
+	$(MAKE) -f LKOpticalFlow/CMakeFiles/tst.dir/build.make LKOpticalFlow/CMakeFiles/tst.dir/clean
+.PHONY : LKOpticalFlow/CMakeFiles/tst.dir/clean
+
+# clean rule for target.
+clean: LKOpticalFlow/CMakeFiles/tst.dir/clean
 
 .PHONY : clean
 
