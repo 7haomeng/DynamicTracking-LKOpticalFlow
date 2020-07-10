@@ -67,14 +67,14 @@ set(LKOpticalFlow_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(LKOpticalFlow_SOURCE_PREFIX /home/chinghaomeng/LK_Optical_Flow/src/LKOpticalFlow)
-  set(LKOpticalFlow_DEVEL_PREFIX /home/chinghaomeng/LK_Optical_Flow/devel)
+  set(LKOpticalFlow_SOURCE_PREFIX /home/iscilab/DynamicTracking-LKOpticalFlow/src/LKOpticalFlow)
+  set(LKOpticalFlow_DEVEL_PREFIX /home/iscilab/DynamicTracking-LKOpticalFlow/devel)
   set(LKOpticalFlow_INSTALL_PREFIX "")
   set(LKOpticalFlow_PREFIX ${LKOpticalFlow_DEVEL_PREFIX})
 else()
   set(LKOpticalFlow_SOURCE_PREFIX "")
   set(LKOpticalFlow_DEVEL_PREFIX "")
-  set(LKOpticalFlow_INSTALL_PREFIX /home/chinghaomeng/LK_Optical_Flow/install)
+  set(LKOpticalFlow_INSTALL_PREFIX /home/iscilab/DynamicTracking-LKOpticalFlow/install)
   set(LKOpticalFlow_PREFIX ${LKOpticalFlow_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/chinghaomeng/LK_Optical_Flow/install/lib;/home/chinghaomeng/LK_Optical_Flow/devel/lib;/home/chinghaomeng/realsense_ws/devel/lib;/opt/ros/kinetic/lib)
+    foreach(path /home/iscilab/DynamicTracking-LKOpticalFlow/install/lib;/home/iscilab/DynamicTracking-LKOpticalFlow/devel/lib;/home/iscilab/realsense_ws/devel/lib;/opt/ros/kinetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

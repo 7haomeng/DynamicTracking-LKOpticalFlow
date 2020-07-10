@@ -1,0 +1,9 @@
+<launch>
+
+<!--<node name="LKOpticalFlow_Realsense" pkg="LKOpticalFlow" type="LK_OpticalFlow_v2" output="screen"/>-->
+
+<node name="LKOpticalFlow_Realsense" pkg="LKOpticalFlow" type="LK_OpticalFlow_v2" output="screen"/>
+
+<node pkg="rviz" type="rviz" name="rviz" args="-d $(find LKOpticalFlow)/rviz/LK_v2.rviz" output="screen"/>
+
+</launch>

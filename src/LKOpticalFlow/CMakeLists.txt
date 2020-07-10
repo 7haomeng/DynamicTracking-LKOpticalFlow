@@ -11,9 +11,24 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  sensor_msgs
+  geometry_msgs
+  cv_bridge
+  image_transport
 )
-find_package(OpenCV 2.4 REQUIRED)
+
+find_package(OpenCV 3.3.1 REQUIRED)
 find_package(realsense2 REQUIRED)
+
+find_package(Eigen3 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIRS})
+
+find_package(PCL 1.2 REQUIRED)
+
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -139,12 +154,18 @@ include_directories(
 add_executable(tst src/tst.cpp)
 target_link_libraries(tst ${catkin_LIBRARIES})
 
+add_executable(opticalflow_0709 src/opticalflow_v2.cpp)
+target_link_libraries(opticalflow_0709 ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${realsense2_LIBRARY})
+
 add_executable(LK_OpticalFlow src/LK_OpticalFlow.cpp)
 target_link_libraries(LK_OpticalFlow ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${realsense2_LIBRARY})
 
 add_executable(LK_OpticalFlow_v2 src/LK_OpticalFlow_v2.cpp)
 target_link_libraries(LK_OpticalFlow_v2 ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${realsense2_LIBRARY})
 
+
+add_executable(d435_pcl src/d435_pcl.cpp)
+target_link_libraries(d435_pcl ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${realsense2_LIBRARY} ${PCL_LIBRARIES})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

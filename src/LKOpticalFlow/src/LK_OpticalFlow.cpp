@@ -25,11 +25,6 @@ private:
     vector<Point2f> points[2];  // point0為特徵點的原来位置，point1為特徵點的新位置
     vector<Point2f> initial;    // 初始化跟蹤點的位置
     vector<Point2f> features;   // 檢測的特徵
-    /****************************************/
-    // Mat points[2];  // point0為特徵點的原来位置，point1為特徵點的新位置
-    // Mat initial;    // 初始化跟蹤點的位置
-    // Mat features;   // 檢測的特徵
-    /****************************************/
     int maxCount = 500; // 檢測的最大角點數目
     double qLevel = 0.01;   // 特徵檢測的等級（一般於0.01-0.1之間）
     double minDist = 10.0;  // 兩特徵點之間的最小距離，小於此距離的點要被忽略
@@ -45,14 +40,6 @@ public:
     bool AcceptTrackedPoint(int);
 };
 
-//輸出相應信息和OpenCV版本-----
-//static void helpinformation()
-//{
-//    cout <<"\n\n\t\t\t 光流法跟蹤運動目標檢測\n"
-//         <<"\n\n\t\t\t 當前使用的OpenCV版本為：" << CV_VERSION 
-//         <<"\n\n" ;
-//}
-
 //main( )函數，程序入口
 LK_OpticalFlow::LK_OpticalFlow(ros::NodeHandle nh)
 {
@@ -64,8 +51,7 @@ LK_OpticalFlow::LK_OpticalFlow(ros::NodeHandle nh)
 	// pipe.start(cfg);
     //加載使用的影片文件，放在項目程序運行文件下
     cv::VideoCapture capture(0);
-    //顯示信息函數
-    // helpinformation();
+
     // Camera讀取文件開關
     if(capture.isOpened())  
     {

@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/chinghaomeng/LK_Optical_Flow/src
+CMAKE_SOURCE_DIR = /home/iscilab/DynamicTracking-LKOpticalFlow/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/chinghaomeng/LK_Optical_Flow/build
+CMAKE_BINARY_DIR = /home/iscilab/DynamicTracking-LKOpticalFlow/build
 
 # Utility rule file for doxygen.
 
@@ -67,6 +67,6 @@ CMakeFiles/doxygen.dir/clean:
 .PHONY : CMakeFiles/doxygen.dir/clean
 
 CMakeFiles/doxygen.dir/depend:
-	cd /home/chinghaomeng/LK_Optical_Flow/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/chinghaomeng/LK_Optical_Flow/src /home/chinghaomeng/LK_Optical_Flow/src /home/chinghaomeng/LK_Optical_Flow/build /home/chinghaomeng/LK_Optical_Flow/build /home/chinghaomeng/LK_Optical_Flow/build/CMakeFiles/doxygen.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/iscilab/DynamicTracking-LKOpticalFlow/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/iscilab/DynamicTracking-LKOpticalFlow/src /home/iscilab/DynamicTracking-LKOpticalFlow/src /home/iscilab/DynamicTracking-LKOpticalFlow/build /home/iscilab/DynamicTracking-LKOpticalFlow/build /home/iscilab/DynamicTracking-LKOpticalFlow/build/CMakeFiles/doxygen.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/doxygen.dir/depend
 
