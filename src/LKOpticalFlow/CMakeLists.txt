@@ -15,6 +15,8 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   cv_bridge
   image_transport
+  pcl_conversions
+  pcl_ros
 )
 
 find_package(OpenCV 3.3.1 REQUIRED)
@@ -154,14 +156,11 @@ include_directories(
 add_executable(tst src/tst.cpp)
 target_link_libraries(tst ${catkin_LIBRARIES})
 
-add_executable(opticalflow_0709 src/opticalflow_v2.cpp)
-target_link_libraries(opticalflow_0709 ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${realsense2_LIBRARY})
-
 add_executable(LK_OpticalFlow src/LK_OpticalFlow.cpp)
 target_link_libraries(LK_OpticalFlow ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${realsense2_LIBRARY})
 
 add_executable(LK_OpticalFlow_v2 src/LK_OpticalFlow_v2.cpp)
-target_link_libraries(LK_OpticalFlow_v2 ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${realsense2_LIBRARY})
+target_link_libraries(LK_OpticalFlow_v2 ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${realsense2_LIBRARY} ${PCL_LIBRARIES})
 
 
 add_executable(d435_pcl src/d435_pcl.cpp)

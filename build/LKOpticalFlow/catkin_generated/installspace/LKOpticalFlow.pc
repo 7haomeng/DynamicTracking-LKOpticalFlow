@@ -1,4 +1,4 @@
-prefix=/home/iscilab/DynamicTracking-LKOpticalFlow/install
+prefix=/home/chinghaomeng/DynamicTracking-LKOpticalFlow/install
 
 Name: LKOpticalFlow
 Description: Description of LKOpticalFlow

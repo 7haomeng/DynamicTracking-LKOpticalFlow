@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/iscilab/DynamicTracking-LKOpticalFlow/src/LKOpticalFlow/src/LK_OpticalFlow_v2.cpp" "/home/iscilab/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/CMakeFiles/LK_OpticalFlow_v2.dir/src/LK_OpticalFlow_v2.cpp.o"
+  "/home/chinghaomeng/DynamicTracking-LKOpticalFlow/src/LKOpticalFlow/src/LK_OpticalFlow_v2.cpp" "/home/chinghaomeng/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/CMakeFiles/LK_OpticalFlow_v2.dir/src/LK_OpticalFlow_v2.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -16,6 +16,10 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
   "EIGEN_USE_NEW_STDVECTOR"
   "EIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET"
   "FLANN_STATIC"
+  "QT_CORE_LIB"
+  "QT_GUI_LIB"
+  "QT_NO_DEBUG"
+  "QT_WIDGETS_LIB"
   "ROSCONSOLE_BACKEND_LOG4CXX"
   "ROS_BUILD_SHARED_LIBS=1"
   "ROS_PACKAGE_NAME=\"LKOpticalFlow\""
@@ -36,15 +40,15 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/usr/include/eigen3"
   "/usr/include/vtk-6.2"
-  "/usr/include/jsoncpp"
-  "/usr/include/x86_64-linux-gnu"
-  "/usr/include/freetype2"
-  "/usr/include/x86_64-linux-gnu/freetype2"
-  "/usr/include/hdf5/openmpi"
   "/usr/lib/openmpi/include/openmpi/opal/mca/event/libevent2021/libevent"
   "/usr/lib/openmpi/include/openmpi/opal/mca/event/libevent2021/libevent/include"
   "/usr/lib/openmpi/include"
   "/usr/lib/openmpi/include/openmpi"
+  "/usr/include/hdf5/openmpi"
+  "/usr/include/x86_64-linux-gnu"
+  "/usr/include/jsoncpp"
+  "/usr/include/freetype2"
+  "/usr/include/x86_64-linux-gnu/freetype2"
   "/usr/include/python2.7"
   "/usr/include/libxml2"
   "/usr/include/tcl"
@@ -55,6 +59,11 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/opt/ros/kinetic/include/opencv-3.3.1-dev"
   "/opt/ros/kinetic/include/opencv-3.3.1-dev/opencv"
   "/usr/local/include"
+  "/usr/include/x86_64-linux-gnu/qt5"
+  "/usr/include/x86_64-linux-gnu/qt5/QtWidgets"
+  "/usr/include/x86_64-linux-gnu/qt5/QtGui"
+  "/usr/include/x86_64-linux-gnu/qt5/QtCore"
+  "/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64"
   )
 
 # Targets to which this target links.

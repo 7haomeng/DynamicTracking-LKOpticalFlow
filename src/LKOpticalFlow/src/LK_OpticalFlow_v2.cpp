@@ -9,18 +9,26 @@
 #include <cstdio>
 #include <cv_bridge/cv_bridge.h>
 #include <image_transport/image_transport.h>
-#include "geometry_msgs/Vector3.h"
-#include "sensor_msgs/Image.h"
-#include <sensor_msgs/image_encodings.h>
+#include <geometry_msgs/Vector3.h>
+#include <sensor_msgs/Image.h>
+#include <sensor_msgs/PointCloud.h>
+#include <pcl_conversions/pcl_conversions.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+#include <pcl/pcl_macros.h>
+#include <pcl/common/common.h>
+
+// #include <sensor_msgs/image_encodings.h>
 using namespace ros;
 using namespace std;
 using namespace cv;
 
+typedef pcl::PointCloud<pcl::PointXYZRGB> PointCloudXYZRGB;
+typedef pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudXYZRGBPtr;
+
 class LK_OpticalFlow
 {
 private:
-    // **rs2::pipeline pipe; // 建構一個RealSense抽象設備的管道以容納擷取到的影像
-	// **rs2::config cfg; // 創建自定義參數以配置管道
     cv::Mat frame;
     Mat result;
     Mat gray;   // 當前圖片
@@ -39,6 +47,11 @@ private:
     int count = 0;
     double deltaDist;
     geometry_msgs::Vector3 feature_points_msg;
+    // geometry_msgs::Point32 feature_points_msg;
+    sensor_msgs::PointCloud feature_cloud_msg;
+    ros::NodeHandle my_nh;
+    PointCloudXYZRGBPtr cloud_ptr;
+    
 
 public:
     LK_OpticalFlow(ros::NodeHandle);
@@ -48,177 +61,75 @@ public:
     bool AcceptTrackedPoint(int);
     ros::Publisher feature_points_pub;
     ros::Subscriber image_raw_sub;
-    ros::Publisher tesy_image_pub;
+    ros::Publisher feature_points_cloud;
+    // ros::Publisher test_image_pub;
 };
-// VideoWriter writer_opticalflow("VideoTest.avi", CV_FOURCC('M', 'J', 'P', 'G'), 30.0, Size(1920, 1080));
-// VideoWriter writer_opticalflow("VideoTest.avi", CV_FOURCC('D','I','V','X'), 30.0, Size(1920, 1080));
 
 LK_OpticalFlow::LK_OpticalFlow(ros::NodeHandle nh)
 {
+    image_raw_sub = nh.subscribe("/camera/color/image_raw", 1, &LK_OpticalFlow::image_raw_Callback,this);
+    image_raw_sub = nh.subscribe("/camera/color/image_raw", 1, &LK_OpticalFlow::image_raw_Callback,this);
     feature_points_pub = nh.advertise<geometry_msgs::Vector3>("feature_points", 10);
-    tesy_image_pub = nh.advertise<sensor_msgs::Image>("test_image", 1);
+    // feature_points_pub = nh.advertise<geometry_msgs::Point32>("feature_points", 10);
+    feature_points_cloud = nh.advertise<sensor_msgs::PointCloud>("feature_points_cloud", 10);
+    // test_image_pub = nh.advertise<sensor_msgs::Image>("test_image", 1);
 
+    cv::namedWindow(window_name);
 	const int width = 640; // 設定影像尺寸(寬w，高h)
 	const int high = 480;
-    cv::namedWindow(window_name);
-    // const int width = 640; // 設定影像尺寸(寬w，高h)
-	// const int high = 480;
-	// **cfg.enable_stream(RS2_STREAM_COLOR, width, high, RS2_FORMAT_BGR8, 30); // BGR888格式彩色影像 30fps 6/1
-	// **pipe.start(cfg); // 根據設定值啟動指定串流影像 6/1
-    // VideoWriter writer_opticalflow("VideoTest.avi", CV_FOURCC('M', 'J', 'P', 'G'), 25.0, Size(1920, 1080));
-    
-    image_raw_sub = nh.subscribe("/camera/color/image_raw", 1, &LK_OpticalFlow::image_raw_Callback,this);
-    // while(true)
-    // **while(ros::ok())
-    // **{
-        // **t1 = clock()*0.001;
-        // int delta_time_temp = 0;
-        // clock_t delta_time_temp = 0;
-        
-        // double BeginTime = double(ros::Time::now().toNSec())*0.000001;
-        // cout << "BeginTime : "<< BeginTime << endl;
-        
-		// **rs2::frameset frames = pipe.wait_for_frames(); // 等待下一組影像 6/1
-		// **rs2::frame color_frame = frames.get_color_frame(); // 取得每一張彩色影像 6/1
-		// **Mat color_image(Size(width, high), CV_8UC3, (void*)color_frame.get_data(), Mat::AUTO_STEP); //建立OpenCV Mat格式之彩色影像
-		// **frame = color_image;
-        // writer << frame;
-        // printf(doublelsense D435 successfully!");
-        // double BeginTime = double(ros::Time::now().toNSec())*0.000001;
-        // cout << "BeginTime : "<< BeginTime << endl;
-        
-        // **if(!frame.empty())
-        // **{
-            // **Tracking(frame, result);
-            // **t2 = clock()*0.001;
-            // double EndTime = double(ros::Time::now().toNSec())*0.000001;
-            // cout << "EndTime : "<< EndTime << endl;
-            // ros::Time EndTime = ros::Time::now();
-            // cout << "EndTime : "<< EndTime << endl;
-            
-            // double DeltaTime = EndTime - BeginTime;
-            // cout << "DeltaTime : "<< DeltaTime << endl;
-            // **delta_time = t2-t1;
-            // **cout << "ClockDeltaTime : "<< delta_time << "ms" << endl;
 
-            // cout << "delta_time : "<< delta_time << endl;
-            // for(count = 0; count<100; count++)
-            // {
-                // delta_time_temp = delta_time;
-            // cout << "delta_time_temp : "<< delta_time_temp << endl;
-
-                // delta_time_temp = delta_time_temp + delta_time;
-            // cout << "delta_time_temp : "<< delta_time_temp << endl;
-            // }
-            // clock_t avg_time = delta_time_temp/count;
-            // cout << "avg_time : " << avg_time << endl;
-            // **count=count+1;
-            // **cout<< "count :"<< count << endl;
-            
-        // **}
-        // **else
-        // **{ 
-            // **printf("No captured frame -- Break!\n");
-            // **break;
-        // **}
-        // **int c = waitKey(50);
-        // **if( (char)c == 27 )
-        // **{
-            // **break; 
-        // **} 
-    // **}
-    // return 0;
+    my_nh = nh;
+    cloud_ptr = PointCloudXYZRGBPtr(new PointCloudXYZRGB);
 }
 
 void LK_OpticalFlow::image_raw_Callback(const sensor_msgs::ImageConstPtr& image_msg)
 {
-    //while(ros::ok())
-    //{
-        t1 = clock()*0.001;
-        // int delta_time_temp = 0;
-        // clock_t delta_time_temp = 0;
-        
-        // double BeginTime = double(ros::Time::now().toNSec())*0.000001;
-        // cout << "BeginTime : "<< BeginTime << endl;
-        
-		// rs2::frameset frames = pipe.wait_for_frames(); // 等待下一組影像 6/1
-		// rs2::frame color_frame = frames.get_color_frame(); // 取得每一張彩色影像 6/1
-		// Mat color_image(Size(width, high), CV_8UC3, (void*)color_frame.get_data(), Mat::AUTO_STEP); //建立OpenCV Mat格式之彩色影像
-		// frame = color_image;
-        // writer << frame;
-        // printf(doublelsense D435 successfully!");
-        // double BeginTime = double(ros::Time::now().toNSec())*0.000001;
-        // cout << "BeginTime : "<< BeginTime << endl;
-        // cv_ptr = cv_bridge::toCvCopy(image_msg, "bgr8");
-        // frame = cv_bridge::toCvCopy(image_msg, "bgr8")->image;
 
-        cv_bridge::CvImagePtr cv_ptr;
-        try{
-            cv_ptr = cv_bridge::toCvCopy(image_msg, sensor_msgs::image_encodings::BGR8);
-            cv_ptr->image.copyTo(frame);
-        }catch (cv_bridge::Exception& e)
-        {
-            ROS_ERROR("cv_bridge exception: %s", e.what());
-            return;
-        }
-        
-        
-        // frame = cv_ptr->image;
-        tesy_image_pub.publish(cv_ptr->toImageMsg());
+    t1 = clock()*0.001;
 
-        if(!frame.empty())
-        {
-            ROS_INFO("OK");
-            Tracking(frame, result);
-            t2 = clock()*0.001;
-            // double EndTime = double(ros::Time::now().toNSec())*0.000001;
-            // cout << "EndTime : "<< EndTime << endl;
-            // ros::Time EndTime = ros::Time::now();
-            // cout << "EndTime : "<< EndTime << endl;
-            
-            // double DeltaTime = EndTime - BeginTime;
-            // cout << "DeltaTime : "<< DeltaTime << endl;
-            delta_time = t2-t1;
-            // cout << "ClockDeltaTime : "<< delta_time << "ms" << endl;
+    cv_ptr = cv_bridge::toCvCopy(image_msg, "bgr8");
+    frame = cv_bridge::toCvCopy(image_msg, "bgr8")->image;
 
-            // cout << "delta_time : "<< delta_time << endl;
-            // for(count = 0; count<100; count++)
-            // {
-                // delta_time_temp = delta_time;
-            // cout << "delta_time_temp : "<< delta_time_temp << endl;
+    // TODO: wait for pointcloud2 topic
+    boost::shared_ptr<sensor_msgs::PointCloud2 const> tmp_ptr;
+    sensor_msgs::PointCloud2 cloud_msg;
+    tmp_ptr = ros::topic::waitForMessage<sensor_msgs::PointCloud2>("/camera/depth_registered/points", my_nh);
+    if(tmp_ptr != NULL){
+        cloud_msg = *tmp_ptr;
+    }
 
-                // delta_time_temp = delta_time_temp + delta_time;
-            // cout << "delta_time_temp : "<< delta_time_temp << endl;
-            // }
-            // clock_t avg_time = delta_time_temp/count;
-            // cout << "avg_time : " << avg_time << endl;
-            count=count+1;
-            // cout<< "count :"<< count << endl;
-            
-        }
-        else
-        { 
-            printf("No captured frame -- Break!\n");
-            // break;
-            return;
-        }
-        int c = waitKey(50);
-        if( (char)c == 27 )
-        {
-            // break;
-            return; 
-        } 
-    //}
+    // Convert ROS pointcloud2 topic to PCL pointcloud
+    // include pcl_conversion.h --> pcl::fromROSMsg(XXXXXXX)
+    pcl::fromROSMsg(cloud_msg, *cloud_ptr);
+    
+
+    // test_image_pub.publish(cv_ptr->toImageMsg());
+
+    if(!frame.empty())
+    {
+        Tracking(frame, result);
+        t2 = clock()*0.001;
+        delta_time = t2-t1;
+        // cout << "ClockDeltaTime : "<< delta_time << "ms" << endl;
+        count=count+1;           
+    }
+    else
+    { 
+        printf("No captured frame -- Break!\n");
+        return;
+    }
+    int c = waitKey(50);
+    if( (char)c == 27 )
+    {
+        return; 
+    } 
 }
 
 
 void LK_OpticalFlow::Tracking(Mat &frame, Mat &output)
 {
-    ROS_INFO("YES");
     cvtColor(frame, gray, CV_BGR2GRAY);
-    // cout << "w: " << frame.cols << ", h: " << frame.rows << endl;
     frame.copyTo(output);
-    ROS_INFO("NICE");
     // 添加特徵點
     if (AddNewPoints()) 
     {
@@ -259,7 +170,6 @@ void LK_OpticalFlow::Tracking(Mat &frame, Mat &output)
         //err:兩偵之間特徵點位置的誤差
     calcOpticalFlowPyrLK(gray_prev, gray, points[0], points[1], status, err); // LK-光流法運動估計
     cout << "w: " << gray.cols << ", h: " << gray.rows << endl;
-    ROS_INFO("GOOD");
     // 去掉一些不好的特徵點
     int k = 0;
     for (size_t i=0; i<points[1].size(); i++)
@@ -298,8 +208,20 @@ void LK_OpticalFlow::Tracking(Mat &frame, Mat &output)
         feature_points_msg.z = 0;
         feature_points_pub.publish(feature_points_msg);
 
+        int index = 640 * points[1][i].y + points[1][i].x;
+        if(pcl_isfinite(cloud_ptr->points[index].x)) {
+            cout << "target point:\nx: " << cloud_ptr->points[index].x;
+            cout << "\ny: " << cloud_ptr->points[index].y;
+            cout << "\nz: " << cloud_ptr->points[index].z << endl;
+        }
+        
+        // feature_cloud_msg.header.frame_id = "map";
+        // feature_cloud_msg.header.stamp = ros::Time::now();
+        // feature_cloud_msg.points[0] = points[1][i].x;
+        // feature_cloud_msg.points[1] = points[1][i].y;
+        // feature_cloud_msg.points[2] = 0;
+        // feature_points_cloud.publish(feature_cloud_msg);
     }
-    ROS_INFO("PERFECT");
     // 把當前跟蹤結果作為下一此參考
     swap(points[1], points[0]);
     swap(gray_prev, gray);

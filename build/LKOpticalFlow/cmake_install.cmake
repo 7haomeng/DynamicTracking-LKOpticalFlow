@@ -1,8 +1,8 @@
-# Install script for directory: /home/iscilab/DynamicTracking-LKOpticalFlow/src/LKOpticalFlow
+# Install script for directory: /home/chinghaomeng/DynamicTracking-LKOpticalFlow/src/LKOpticalFlow
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/iscilab/DynamicTracking-LKOpticalFlow/install")
+  set(CMAKE_INSTALL_PREFIX "/home/chinghaomeng/DynamicTracking-LKOpticalFlow/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -33,17 +33,17 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/iscilab/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/catkin_generated/installspace/LKOpticalFlow.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/chinghaomeng/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/catkin_generated/installspace/LKOpticalFlow.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/LKOpticalFlow/cmake" TYPE FILE FILES
-    "/home/iscilab/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/catkin_generated/installspace/LKOpticalFlowConfig.cmake"
-    "/home/iscilab/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/catkin_generated/installspace/LKOpticalFlowConfig-version.cmake"
+    "/home/chinghaomeng/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/catkin_generated/installspace/LKOpticalFlowConfig.cmake"
+    "/home/chinghaomeng/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/catkin_generated/installspace/LKOpticalFlowConfig-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/LKOpticalFlow" TYPE FILE FILES "/home/iscilab/DynamicTracking-LKOpticalFlow/src/LKOpticalFlow/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/LKOpticalFlow" TYPE FILE FILES "/home/chinghaomeng/DynamicTracking-LKOpticalFlow/src/LKOpticalFlow/package.xml")
 endif()
 

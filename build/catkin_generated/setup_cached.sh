@@ -7,4 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export PWD="/home/iscilab/DynamicTracking-LKOpticalFlow/build"
+export PWD="/home/chinghaomeng/DynamicTracking-LKOpticalFlow/build"
