@@ -1,17 +1,22 @@
 #include <ros/ros.h>
-#include <librealsense2/rs.hpp>
+// #include <librealsense2/rs.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/video/video.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/core/core.hpp>
+
 #include <iostream>
 #include <cstdio>
+// #include <vector>
+
 #include <cv_bridge/cv_bridge.h>
 #include <image_transport/image_transport.h>
+
 #include <geometry_msgs/Vector3.h>
 #include <sensor_msgs/Image.h>
-#include <sensor_msgs/PointCloud.h>
+#include <sensor_msgs/PointCloud2.h>
+
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -22,13 +27,24 @@
 using namespace ros;
 using namespace std;
 using namespace cv;
+// using namespace pcl;
 
 typedef pcl::PointCloud<pcl::PointXYZRGB> PointCloudXYZRGB;
 typedef pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudXYZRGBPtr;
 
+typedef pcl::PointXYZRGB originpoint;
+typedef pcl::PointCloud<pcl::PointXYZRGB> OriginPointCloudXYZRGBtoROSMsg;
+typedef pcl::PointCloud<pcl::PointXYZRGB>::Ptr OriginPointCloudXYZRGBtoROSMsgPtr;
+
+typedef pcl::PointXYZRGB targetpoint;
+typedef pcl::PointCloud<pcl::PointXYZRGB> TargetPointCloudXYZRGBtoROSMsg;
+typedef pcl::PointCloud<pcl::PointXYZRGB>::Ptr TargetPointCloudXYZRGBtoROSMsgPtr;
+
 class LK_OpticalFlow
 {
 private:
+    ros::NodeHandle my_nh;
+
     cv::Mat frame;
     Mat result;
     Mat gray;   // 當前圖片
@@ -43,15 +59,20 @@ private:
     double minDist = 10.0;  // 兩特徵點之間的最小距離，小於此距離的點要被忽略
     vector<uchar> status;   // 跟蹤特徵的狀態，特徵的流發現為1，否則為0
     vector<float> err;
+
     clock_t t1, t2, delta_time;
     int count = 0;
     double deltaDist;
+
     geometry_msgs::Vector3 feature_points_msg;
-    // geometry_msgs::Point32 feature_points_msg;
-    sensor_msgs::PointCloud feature_cloud_msg;
-    ros::NodeHandle my_nh;
-    PointCloudXYZRGBPtr cloud_ptr;
+    sensor_msgs::PointCloud2 originPointCloudtoROSMsg;
+    sensor_msgs::PointCloud2 targetPointCloudtoROSMsg;
     
+    PointCloudXYZRGBPtr cloud_ptr;
+    originpoint origin_pointcloud;
+    OriginPointCloudXYZRGBtoROSMsgPtr origincloudptr_to_ROSMsg;
+    targetpoint target_pointcloud;
+    TargetPointCloudXYZRGBtoROSMsgPtr targetcloudptr_to_ROSMsg;
 
 public:
     LK_OpticalFlow(ros::NodeHandle);
@@ -61,17 +82,19 @@ public:
     bool AcceptTrackedPoint(int);
     ros::Publisher feature_points_pub;
     ros::Subscriber image_raw_sub;
-    ros::Publisher feature_points_cloud;
+    ros::Publisher origin_pointcloud_pub;
+    ros::Publisher target_pointcloud_pub;
     // ros::Publisher test_image_pub;
 };
 
 LK_OpticalFlow::LK_OpticalFlow(ros::NodeHandle nh)
 {
     image_raw_sub = nh.subscribe("/camera/color/image_raw", 1, &LK_OpticalFlow::image_raw_Callback,this);
-    image_raw_sub = nh.subscribe("/camera/color/image_raw", 1, &LK_OpticalFlow::image_raw_Callback,this);
+    // image_raw_sub = nh.subscribe("/camera/color/image_raw", 1, &LK_OpticalFlow::image_raw_Callback,this);
     feature_points_pub = nh.advertise<geometry_msgs::Vector3>("feature_points", 10);
     // feature_points_pub = nh.advertise<geometry_msgs::Point32>("feature_points", 10);
-    feature_points_cloud = nh.advertise<sensor_msgs::PointCloud>("feature_points_cloud", 10);
+    origin_pointcloud_pub = nh.advertise<sensor_msgs::PointCloud2>("origin_pointcloud", 10);
+    target_pointcloud_pub = nh.advertise<sensor_msgs::PointCloud2>("target_pointcloud", 10);
     // test_image_pub = nh.advertise<sensor_msgs::Image>("test_image", 1);
 
     cv::namedWindow(window_name);
@@ -80,6 +103,8 @@ LK_OpticalFlow::LK_OpticalFlow(ros::NodeHandle nh)
 
     my_nh = nh;
     cloud_ptr = PointCloudXYZRGBPtr(new PointCloudXYZRGB);
+    origincloudptr_to_ROSMsg = OriginPointCloudXYZRGBtoROSMsgPtr(new OriginPointCloudXYZRGBtoROSMsg);
+    targetcloudptr_to_ROSMsg = TargetPointCloudXYZRGBtoROSMsgPtr(new TargetPointCloudXYZRGBtoROSMsg);    
 }
 
 void LK_OpticalFlow::image_raw_Callback(const sensor_msgs::ImageConstPtr& image_msg)
@@ -169,7 +194,7 @@ void LK_OpticalFlow::Tracking(Mat &frame, Mat &output)
         //status:若兩偵之間的特徵點有發生變化（有光流法現象）則為1，否則為0
         //err:兩偵之間特徵點位置的誤差
     calcOpticalFlowPyrLK(gray_prev, gray, points[0], points[1], status, err); // LK-光流法運動估計
-    cout << "w: " << gray.cols << ", h: " << gray.rows << endl;
+    // cout << "w: " << gray.cols << ", h: " << gray.rows << endl;
     // 去掉一些不好的特徵點
     int k = 0;
     for (size_t i=0; i<points[1].size(); i++)
@@ -190,9 +215,9 @@ void LK_OpticalFlow::Tracking(Mat &frame, Mat &output)
     // 顯示特徵點和運動軌跡
     for (size_t i=0; i<points[1].size(); i++)
     {
-        line(output, initial[i], points[1][i], Scalar(0, 0, 255));
-        circle(output, initial[i], 3, Scalar(255, 0, 0), -1);
-        circle(output, points[1][i], 3, Scalar(0, 255, 0), -1);
+        line(output, initial[i], points[1][i], Scalar(255, 0, 0));
+        circle(output, initial[i], 3, Scalar(0, 255, 0), -1);
+        circle(output, points[1][i], 3, Scalar(0, 0, 255), -1);
         // cout<< "==================================" << endl;
         // cout << "InitialPoint : " << initial[i] << endl;
         // cout << "TerminalPoint : " << points[1][i] << endl;
@@ -200,28 +225,64 @@ void LK_OpticalFlow::Tracking(Mat &frame, Mat &output)
         // double opticaldistence = sqrt(pow((points[0][i].x - points[1][i].x),2)+pow((points[0][i].y - points[1][i].y),2));
         // cout<< "**************************" << endl;
         // cout << "opticaldistence : " << opticaldistence << endl;
-
-        ROS_INFO("Org feature point: x=%f, y=%f", (float)initial[i].x, (float)initial[i].y);
-        ROS_INFO("End feature point: x=%f, y=%f\n", (float)points[1][i].x, (float)points[1][i].y);
-        feature_points_msg.x = points[1][i].x;
-        feature_points_msg.y = points[1][i].y;
-        feature_points_msg.z = 0;
-        feature_points_pub.publish(feature_points_msg);
-
-        int index = 640 * points[1][i].y + points[1][i].x;
-        if(pcl_isfinite(cloud_ptr->points[index].x)) {
-            cout << "target point:\nx: " << cloud_ptr->points[index].x;
-            cout << "\ny: " << cloud_ptr->points[index].y;
-            cout << "\nz: " << cloud_ptr->points[index].z << endl;
-        }
         
-        // feature_cloud_msg.header.frame_id = "map";
-        // feature_cloud_msg.header.stamp = ros::Time::now();
-        // feature_cloud_msg.points[0] = points[1][i].x;
-        // feature_cloud_msg.points[1] = points[1][i].y;
-        // feature_cloud_msg.points[2] = 0;
-        // feature_points_cloud.publish(feature_cloud_msg);
+        // ROS_INFO("Origin feature point: x=%f, y=%f", (float)initial[i].x, (float)initial[i].y);
+        // ROS_INFO("Target feature point: x=%f, y=%f\n", (float)points[1][i].x, (float)points[1][i].y);
+        // feature_points_msg.x = points[1][i].x;
+        // feature_points_msg.y = points[1][i].y;
+        // feature_points_msg.z = 0;
+        // feature_points_pub.publish(feature_points_msg);
+
+        int initial_index = 640 * initial[i].y + initial[i].x; //計算Origin point單一pixel-wise於640x480第幾個
+        if(pcl_isfinite(cloud_ptr->points[initial_index].x)) 
+        {   
+            cout << "**************" << endl;
+            cout << "Origin point:\nx: " << cloud_ptr->points[initial_index].x;
+            cout << "\ny: " << cloud_ptr->points[initial_index].y;
+            cout << "\nz: " << cloud_ptr->points[initial_index].z << endl;
+
+            origin_pointcloud.r = 0;
+            origin_pointcloud.g = 255;
+            origin_pointcloud.b = 0;
+            origin_pointcloud.x = cloud_ptr->points[initial_index].x;
+            origin_pointcloud.y = cloud_ptr->points[initial_index].y;
+            origin_pointcloud.z = cloud_ptr->points[initial_index].z;
+            origincloudptr_to_ROSMsg->points.push_back(origin_pointcloud);
+        }
+
+        int target_index = 640 * points[1][i].y + points[1][i].x; //計算Target point單一pixel-wise於640x480第幾個
+        if(pcl_isfinite(cloud_ptr->points[target_index].x))
+        {
+            cout << "Target point:\nx: " << cloud_ptr->points[target_index].x;
+            cout << "\ny: " << cloud_ptr->points[target_index].y;
+            cout << "\nz: " << cloud_ptr->points[target_index].z << endl;
+            cout << "**************" << endl;
+            cout << endl;
+            
+            // target_pointcloud.r = cloud_ptr->points[target_index].r;
+            // target_pointcloud.g = cloud_ptr->points[target_index].g;
+            // target_pointcloud.b = cloud_ptr->points[target_index].b;
+            target_pointcloud.r = 255;
+            target_pointcloud.g = 0;
+            target_pointcloud.b = 0;
+            target_pointcloud.x = cloud_ptr->points[target_index].x;
+            target_pointcloud.y = cloud_ptr->points[target_index].y;
+            target_pointcloud.z = cloud_ptr->points[target_index].z;
+            targetcloudptr_to_ROSMsg->points.push_back(target_pointcloud);
+        }
+
     }
+    pcl::toROSMsg(*(origincloudptr_to_ROSMsg), originPointCloudtoROSMsg);
+    originPointCloudtoROSMsg.header.frame_id = "map";
+    originPointCloudtoROSMsg.header.stamp = ros::Time::now();
+    origin_pointcloud_pub.publish(originPointCloudtoROSMsg);
+    origincloudptr_to_ROSMsg->points.clear();
+
+    pcl::toROSMsg(*(targetcloudptr_to_ROSMsg), targetPointCloudtoROSMsg);
+    targetPointCloudtoROSMsg.header.frame_id = "map";
+    targetPointCloudtoROSMsg.header.stamp = ros::Time::now();
+    target_pointcloud_pub.publish(targetPointCloudtoROSMsg);
+    targetcloudptr_to_ROSMsg->points.clear(); // ros::Duration(0.033).sleep();
     // 把當前跟蹤結果作為下一此參考
     swap(points[1], points[0]);
     swap(gray_prev, gray);
