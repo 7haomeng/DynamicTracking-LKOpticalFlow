@@ -1,2 +1,2 @@
 LKOpticalFlow
--DCATKIN_DEVEL_PREFIX=/home/chinghaomeng/DynamicTracking-LKOpticalFlow/devel -DCMAKE_INSTALL_PREFIX=/home/chinghaomeng/DynamicTracking-LKOpticalFlow/install -G Unix Makefiles
+-DCATKIN_DEVEL_PREFIX=/home/graduationv2/DynamicTracking-LKOpticalFlow/devel -DCMAKE_INSTALL_PREFIX=/home/graduationv2/DynamicTracking-LKOpticalFlow/install -G Unix Makefiles

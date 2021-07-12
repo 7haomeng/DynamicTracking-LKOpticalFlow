@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/tst.dir/src/tst.cpp.o"
-  "/home/chinghaomeng/DynamicTracking-LKOpticalFlow/devel/lib/LKOpticalFlow/tst.pdb"
-  "/home/chinghaomeng/DynamicTracking-LKOpticalFlow/devel/lib/LKOpticalFlow/tst"
+  "/home/graduationv2/DynamicTracking-LKOpticalFlow/devel/lib/LKOpticalFlow/tst.pdb"
+  "/home/graduationv2/DynamicTracking-LKOpticalFlow/devel/lib/LKOpticalFlow/tst"
 )
 
 # Per-language clean rules from dependency scanning.

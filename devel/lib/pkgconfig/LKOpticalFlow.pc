@@ -1,8 +1,8 @@
-prefix=/home/chinghaomeng/DynamicTracking-LKOpticalFlow/devel
+prefix=/home/graduationv2/DynamicTracking-LKOpticalFlow/devel
 
 Name: LKOpticalFlow
 Description: Description of LKOpticalFlow
 Version: 0.0.0
 Cflags: 
-Libs: -L${prefix}/lib 
+Libs: -L/home/graduationv2/DynamicTracking-LKOpticalFlow/devel/lib 
 Requires: 

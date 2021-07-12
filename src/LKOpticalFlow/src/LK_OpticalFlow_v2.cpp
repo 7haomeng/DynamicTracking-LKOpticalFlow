@@ -13,6 +13,7 @@
 #include <cv_bridge/cv_bridge.h>
 #include <image_transport/image_transport.h>
 
+#include <std_msgs/Float64MultiArray.h>
 #include <geometry_msgs/Vector3.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/PointCloud2.h>
@@ -67,6 +68,10 @@ private:
     geometry_msgs::Vector3 feature_points_msg;
     sensor_msgs::PointCloud2 originPointCloudtoROSMsg;
     sensor_msgs::PointCloud2 targetPointCloudtoROSMsg;
+	sensor_msgs::ImagePtr output_image;
+	std_msgs::Float64MultiArray origin_point;
+	std_msgs::Float64MultiArray target_point;
+	std_msgs::Float64MultiArray point_data;
     
     PointCloudXYZRGBPtr cloud_ptr;
     originpoint origin_pointcloud;
@@ -80,10 +85,14 @@ public:
     void Tracking(Mat &, Mat &);
     bool AddNewPoints();
     bool AcceptTrackedPoint(int);
+	ros::Subscriber image_raw_sub;
     ros::Publisher feature_points_pub;
-    ros::Subscriber image_raw_sub;
     ros::Publisher origin_pointcloud_pub;
     ros::Publisher target_pointcloud_pub;
+	ros::Publisher origin_point_pub;	
+	ros::Publisher target_point_pub;
+	ros::Publisher point_data_pub;
+	image_transport::Publisher output_image_pub;
     // ros::Publisher test_image_pub;
 };
 
@@ -91,13 +100,18 @@ LK_OpticalFlow::LK_OpticalFlow(ros::NodeHandle nh)
 {
     image_raw_sub = nh.subscribe("/camera/color/image_raw", 1, &LK_OpticalFlow::image_raw_Callback,this);
     // image_raw_sub = nh.subscribe("/camera/color/image_raw", 1, &LK_OpticalFlow::image_raw_Callback,this);
-    feature_points_pub = nh.advertise<geometry_msgs::Vector3>("feature_points", 10);
+    feature_points_pub = nh.advertise<geometry_msgs::Vector3>("lk/feature_points", 1);
     // feature_points_pub = nh.advertise<geometry_msgs::Point32>("feature_points", 10);
-    origin_pointcloud_pub = nh.advertise<sensor_msgs::PointCloud2>("origin_pointcloud", 10);
-    target_pointcloud_pub = nh.advertise<sensor_msgs::PointCloud2>("target_pointcloud", 10);
-    // test_image_pub = nh.advertise<sensor_msgs::Image>("test_image", 1);
+    origin_pointcloud_pub = nh.advertise<sensor_msgs::PointCloud2>("lk/origin_pointcloud", 1);
+    target_pointcloud_pub = nh.advertise<sensor_msgs::PointCloud2>("lk/target_pointcloud", 1);
+	origin_point_pub = nh.advertise<std_msgs::Float64MultiArray>("lk/origin_point", 1);
+	target_point_pub = nh.advertise<std_msgs::Float64MultiArray>("lk/target_point", 1);
+	point_data_pub = nh.advertise<std_msgs::Float64MultiArray>("lk/point_data", 1);
 
-    cv::namedWindow(window_name);
+	image_transport::ImageTransport it(nh);
+	output_image_pub = it.advertise("lk//camera/LK_OpticalFlow_image", 1);
+
+    //cv::namedWindow(window_name);
 	const int width = 640; // 設定影像尺寸(寬w，高h)
 	const int high = 480;
 
@@ -135,7 +149,8 @@ void LK_OpticalFlow::image_raw_Callback(const sensor_msgs::ImageConstPtr& image_
         Tracking(frame, result);
         t2 = clock()*0.001;
         delta_time = t2-t1;
-        // cout << "ClockDeltaTime : "<< delta_time << "ms" << endl;
+        //cout << "ClockDeltaTime : "<< delta_time << "ms" << endl;
+		//cout << "FPS : "<< 1 / delta_time * 1000 << endl;
         count=count+1;           
     }
     else
@@ -248,7 +263,17 @@ void LK_OpticalFlow::Tracking(Mat &frame, Mat &output)
             origin_pointcloud.y = cloud_ptr->points[initial_index].y;
             origin_pointcloud.z = cloud_ptr->points[initial_index].z;
             origincloudptr_to_ROSMsg->points.push_back(origin_pointcloud);
+
+			//printf("origin_pointcloud.x : %d\n", cloud_ptr->points[initial_index].x);
+
+			//origin_point.data.push_back(cloud_ptr->points[initial_index].x);
+			//origin_point.data.push_back(cloud_ptr->points[initial_index].y);
+			//origin_point.data.push_back(cloud_ptr->points[initial_index].z);
+			//origin_point_pub.publish(origin_point);
+			//origin_point.data.clear();
+
         }
+		
 
         int target_index = 640 * points[1][i].y + points[1][i].x; //計算Target point單一pixel-wise於640x480第幾個
         if(pcl_isfinite(cloud_ptr->points[target_index].x))
@@ -269,8 +294,23 @@ void LK_OpticalFlow::Tracking(Mat &frame, Mat &output)
             target_pointcloud.y = cloud_ptr->points[target_index].y;
             target_pointcloud.z = cloud_ptr->points[target_index].z;
             targetcloudptr_to_ROSMsg->points.push_back(target_pointcloud);
+
+			//target_point.data.push_back(cloud_ptr->points[target_index].x);
+			//target_point.data.push_back(cloud_ptr->points[target_index].y);
+			//target_point.data.push_back(cloud_ptr->points[target_index].z);
+			//target_point_pub.publish(target_point);
+			//target_point.data.clear();
+
         }
 
+		point_data.data.push_back(cloud_ptr->points[initial_index].x);
+		point_data.data.push_back(cloud_ptr->points[initial_index].y);
+		point_data.data.push_back(cloud_ptr->points[initial_index].z);
+		point_data.data.push_back(cloud_ptr->points[target_index].x);
+		point_data.data.push_back(cloud_ptr->points[target_index].y);
+		point_data.data.push_back(cloud_ptr->points[target_index].z);
+		point_data_pub.publish(point_data);
+		point_data.data.clear();
     }
     pcl::toROSMsg(*(origincloudptr_to_ROSMsg), originPointCloudtoROSMsg);
     originPointCloudtoROSMsg.header.frame_id = "map";
@@ -286,7 +326,9 @@ void LK_OpticalFlow::Tracking(Mat &frame, Mat &output)
     // 把當前跟蹤結果作為下一此參考
     swap(points[1], points[0]);
     swap(gray_prev, gray);
-    cv::imshow("Lucas–Kanade Optical Flow Tracking", output);
+    //cv::imshow("Lucas–Kanade Optical Flow Tracking", output);
+	output_image = cv_bridge::CvImage(std_msgs::Header(), "bgr8", output).toImageMsg();
+	output_image_pub.publish(output_image);
 }
 
 

@@ -1,8 +1,8 @@
-# Install script for directory: /home/chinghaomeng/DynamicTracking-LKOpticalFlow/src/LKOpticalFlow
+# Install script for directory: /home/graduationv2/DynamicTracking-LKOpticalFlow/src/LKOpticalFlow
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/chinghaomeng/DynamicTracking-LKOpticalFlow/install")
+  set(CMAKE_INSTALL_PREFIX "/home/graduationv2/DynamicTracking-LKOpticalFlow/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -32,18 +32,23 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
   set(CMAKE_INSTALL_SO_NO_EXE "1")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/chinghaomeng/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/catkin_generated/installspace/LKOpticalFlow.pc")
+# Is this installation the result of a crosscompile?
+if(NOT DEFINED CMAKE_CROSSCOMPILING)
+  set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/graduationv2/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/catkin_generated/installspace/LKOpticalFlow.pc")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/LKOpticalFlow/cmake" TYPE FILE FILES
-    "/home/chinghaomeng/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/catkin_generated/installspace/LKOpticalFlowConfig.cmake"
-    "/home/chinghaomeng/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/catkin_generated/installspace/LKOpticalFlowConfig-version.cmake"
+    "/home/graduationv2/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/catkin_generated/installspace/LKOpticalFlowConfig.cmake"
+    "/home/graduationv2/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/catkin_generated/installspace/LKOpticalFlowConfig-version.cmake"
     )
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/LKOpticalFlow" TYPE FILE FILES "/home/chinghaomeng/DynamicTracking-LKOpticalFlow/src/LKOpticalFlow/package.xml")
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/LKOpticalFlow" TYPE FILE FILES "/home/graduationv2/DynamicTracking-LKOpticalFlow/src/LKOpticalFlow/package.xml")
 endif()
 
