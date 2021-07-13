@@ -31,8 +31,6 @@
 /home/graduationv2/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/CMakeFiles/install/strip.dir
 /home/graduationv2/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/CMakeFiles/install/local.dir
 /home/graduationv2/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/CMakeFiles/edit_cache.dir
-/home/graduationv2/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/CMakeFiles/point_data.dir
-/home/graduationv2/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir
 /home/graduationv2/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/CMakeFiles/tf2_msgs_generate_messages_lisp.dir
 /home/graduationv2/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/CMakeFiles/tf2_msgs_generate_messages_cpp.dir
 /home/graduationv2/DynamicTracking-LKOpticalFlow/build/LKOpticalFlow/CMakeFiles/actionlib_msgs_generate_messages_py.dir

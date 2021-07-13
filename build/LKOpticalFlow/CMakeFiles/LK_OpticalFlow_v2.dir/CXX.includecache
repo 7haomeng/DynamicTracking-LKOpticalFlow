@@ -23,6 +23,8 @@ iostream
 -
 cstdio
 -
+math.h
+-
 cv_bridge/cv_bridge.h
 -
 image_transport/image_transport.h

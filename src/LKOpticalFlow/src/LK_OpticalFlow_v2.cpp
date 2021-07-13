@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <cstdio>
+#include <math.h>
 // #include <vector>
 
 #include <cv_bridge/cv_bridge.h>
@@ -65,6 +66,14 @@ private:
     int count = 0;
     double deltaDist;
 
+	float x_op_original;
+	float y_op_original;
+	float z_op_original;
+	float x_op_target;
+	float y_op_target;
+	float z_op_target;
+	float distance;
+
     geometry_msgs::Vector3 feature_points_msg;
     sensor_msgs::PointCloud2 originPointCloudtoROSMsg;
     sensor_msgs::PointCloud2 targetPointCloudtoROSMsg;
@@ -85,6 +94,7 @@ public:
     void Tracking(Mat &, Mat &);
     bool AddNewPoints();
     bool AcceptTrackedPoint(int);
+	float ComputeDistance(float, float, float, float, float, float);
 	ros::Subscriber image_raw_sub;
     ros::Publisher feature_points_pub;
     ros::Publisher origin_pointcloud_pub;
@@ -109,7 +119,7 @@ LK_OpticalFlow::LK_OpticalFlow(ros::NodeHandle nh)
 	point_data_pub = nh.advertise<std_msgs::Float64MultiArray>("lk/point_data", 1);
 
 	image_transport::ImageTransport it(nh);
-	output_image_pub = it.advertise("lk//camera/LK_OpticalFlow_image", 1);
+	output_image_pub = it.advertise("lk/camera/LK_OpticalFlow_image", 1);
 
     //cv::namedWindow(window_name);
 	const int width = 640; // 設定影像尺寸(寬w，高h)
@@ -250,11 +260,7 @@ void LK_OpticalFlow::Tracking(Mat &frame, Mat &output)
 
         int initial_index = 640 * initial[i].y + initial[i].x; //計算Origin point單一pixel-wise於640x480第幾個
         if(pcl_isfinite(cloud_ptr->points[initial_index].x)) 
-        {   
-            cout << "**************" << endl;
-            cout << "Origin point:\nx: " << cloud_ptr->points[initial_index].x;
-            cout << "\ny: " << cloud_ptr->points[initial_index].y;
-            cout << "\nz: " << cloud_ptr->points[initial_index].z << endl;
+        {   //ROS_INFO("\033[1;32m\nOrigin point[x y z] : [%lf %lf %lf]\033[0m",cloud_ptr->points[initial_index].x,cloud_ptr->points[initial_index].y,cloud_ptr->points[initial_index].z);
 
             origin_pointcloud.r = 0;
             origin_pointcloud.g = 255;
@@ -278,11 +284,12 @@ void LK_OpticalFlow::Tracking(Mat &frame, Mat &output)
         int target_index = 640 * points[1][i].y + points[1][i].x; //計算Target point單一pixel-wise於640x480第幾個
         if(pcl_isfinite(cloud_ptr->points[target_index].x))
         {
-            cout << "Target point:\nx: " << cloud_ptr->points[target_index].x;
-            cout << "\ny: " << cloud_ptr->points[target_index].y;
-            cout << "\nz: " << cloud_ptr->points[target_index].z << endl;
-            cout << "**************" << endl;
-            cout << endl;
+			//ROS_INFO("\033[1;31m\nTarget point[x y z] : [%lf %lf %lf]\n\033[0m",cloud_ptr->points[target_index].x,cloud_ptr->points[target_index].y,cloud_ptr->points[target_index].z);
+            //cout << "Target point:\nx: " << cloud_ptr->points[target_index].x;
+            //cout << "\ny: " << cloud_ptr->points[target_index].y;
+            //cout << "\nz: " << cloud_ptr->points[target_index].z << endl;
+            //cout << "**************" << endl;
+            //cout << endl;
             
             // target_pointcloud.r = cloud_ptr->points[target_index].r;
             // target_pointcloud.g = cloud_ptr->points[target_index].g;
@@ -302,15 +309,28 @@ void LK_OpticalFlow::Tracking(Mat &frame, Mat &output)
 			//target_point.data.clear();
 
         }
-
-		point_data.data.push_back(cloud_ptr->points[initial_index].x);
-		point_data.data.push_back(cloud_ptr->points[initial_index].y);
-		point_data.data.push_back(cloud_ptr->points[initial_index].z);
-		point_data.data.push_back(cloud_ptr->points[target_index].x);
-		point_data.data.push_back(cloud_ptr->points[target_index].y);
-		point_data.data.push_back(cloud_ptr->points[target_index].z);
-		point_data_pub.publish(point_data);
-		point_data.data.clear();
+		
+		if((pcl_isfinite(cloud_ptr->points[initial_index].x)) && (pcl_isfinite(cloud_ptr->points[target_index].x)))
+        {
+			x_op_original = cloud_ptr->points[initial_index].x;
+			y_op_original = cloud_ptr->points[initial_index].y;
+			z_op_original = cloud_ptr->points[initial_index].z;
+			x_op_target = cloud_ptr->points[target_index].x;
+			y_op_target = cloud_ptr->points[target_index].y;
+			z_op_target = cloud_ptr->points[target_index].z;
+			ROS_INFO("\033[1;32mOptical Flow points : [ %lf %lf %lf %lf %lf %lf ]\033[0m",x_op_original,y_op_original,z_op_original,x_op_target,y_op_target,z_op_target);
+			point_data.data.push_back(cloud_ptr->points[initial_index].x);
+			point_data.data.push_back(cloud_ptr->points[initial_index].y);
+			point_data.data.push_back(cloud_ptr->points[initial_index].z);
+			point_data.data.push_back(cloud_ptr->points[target_index].x);
+			point_data.data.push_back(cloud_ptr->points[target_index].y);
+			point_data.data.push_back(cloud_ptr->points[target_index].z);
+			point_data_pub.publish(point_data);
+			point_data.data.clear();
+			
+			ROS_INFO("\033[1;31mDistance : [ %lf ]\n\033[0m",ComputeDistance(x_op_original,y_op_original,z_op_original,x_op_target,y_op_target,z_op_target));
+			//ComputeDistance(x_op_original,y_op_original,z_op_original,x_op_target,y_op_target,z_op_target);
+		}
     }
     pcl::toROSMsg(*(origincloudptr_to_ROSMsg), originPointCloudtoROSMsg);
     originPointCloudtoROSMsg.header.frame_id = "map";
@@ -344,6 +364,12 @@ bool LK_OpticalFlow::AcceptTrackedPoint(int i)
 {
     deltaDist = abs(points[0][i].x - points[1][i].x) + abs(points[0][i].y - points[1][i].y);
     return status[i] && deltaDist > 2;
+}
+
+float LK_OpticalFlow::ComputeDistance(float x_o, float y_o, float z_o, float x_t, float y_t, float z_t)
+{
+	distance = sqrt(pow((x_t - x_o),2) + pow((y_t - y_o),2) + pow((z_t - z_o),2));
+	return distance;
 }
 
 int main(int argc, char** argv)

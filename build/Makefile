@@ -285,32 +285,6 @@ gtest_main/fast:
 .PHONY : gtest_main/fast
 
 #=============================================================================
-# Target rules for targets named point_data
-
-# Build rule for target.
-point_data: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 point_data
-.PHONY : point_data
-
-# fast build rule for target.
-point_data/fast:
-	$(MAKE) -f LKOpticalFlow/CMakeFiles/point_data.dir/build.make LKOpticalFlow/CMakeFiles/point_data.dir/build
-.PHONY : point_data/fast
-
-#=============================================================================
-# Target rules for targets named LK_OpticalFlow
-
-# Build rule for target.
-LK_OpticalFlow: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 LK_OpticalFlow
-.PHONY : LK_OpticalFlow
-
-# fast build rule for target.
-LK_OpticalFlow/fast:
-	$(MAKE) -f LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir/build.make LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir/build
-.PHONY : LK_OpticalFlow/fast
-
-#=============================================================================
 # Target rules for targets named tf2_msgs_generate_messages_lisp
 
 # Build rule for target.
@@ -1359,8 +1333,6 @@ help:
 	@echo "... gmock"
 	@echo "... gtest"
 	@echo "... gtest_main"
-	@echo "... point_data"
-	@echo "... LK_OpticalFlow"
 	@echo "... tf2_msgs_generate_messages_lisp"
 	@echo "... tf2_msgs_generate_messages_cpp"
 	@echo "... actionlib_msgs_generate_messages_py"

@@ -168,36 +168,6 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-LKOpticalFlow/CMakeFiles/point_data.dir/rule:
-	cd /home/graduationv2/DynamicTracking-LKOpticalFlow/build && $(MAKE) -f CMakeFiles/Makefile2 LKOpticalFlow/CMakeFiles/point_data.dir/rule
-.PHONY : LKOpticalFlow/CMakeFiles/point_data.dir/rule
-
-# Convenience name for target.
-point_data: LKOpticalFlow/CMakeFiles/point_data.dir/rule
-
-.PHONY : point_data
-
-# fast build rule for target.
-point_data/fast:
-	cd /home/graduationv2/DynamicTracking-LKOpticalFlow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/point_data.dir/build.make LKOpticalFlow/CMakeFiles/point_data.dir/build
-.PHONY : point_data/fast
-
-# Convenience name for target.
-LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir/rule:
-	cd /home/graduationv2/DynamicTracking-LKOpticalFlow/build && $(MAKE) -f CMakeFiles/Makefile2 LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir/rule
-.PHONY : LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir/rule
-
-# Convenience name for target.
-LK_OpticalFlow: LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir/rule
-
-.PHONY : LK_OpticalFlow
-
-# fast build rule for target.
-LK_OpticalFlow/fast:
-	cd /home/graduationv2/DynamicTracking-LKOpticalFlow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir/build.make LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir/build
-.PHONY : LK_OpticalFlow/fast
-
-# Convenience name for target.
 LKOpticalFlow/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule:
 	cd /home/graduationv2/DynamicTracking-LKOpticalFlow/build && $(MAKE) -f CMakeFiles/Makefile2 LKOpticalFlow/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule
 .PHONY : LKOpticalFlow/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule
@@ -1382,33 +1352,6 @@ bond_generate_messages_nodejs/fast:
 	cd /home/graduationv2/DynamicTracking-LKOpticalFlow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/bond_generate_messages_nodejs.dir/build.make LKOpticalFlow/CMakeFiles/bond_generate_messages_nodejs.dir/build
 .PHONY : bond_generate_messages_nodejs/fast
 
-src/LK_OpticalFlow.o: src/LK_OpticalFlow.cpp.o
-
-.PHONY : src/LK_OpticalFlow.o
-
-# target to build an object file
-src/LK_OpticalFlow.cpp.o:
-	cd /home/graduationv2/DynamicTracking-LKOpticalFlow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir/build.make LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir/src/LK_OpticalFlow.cpp.o
-.PHONY : src/LK_OpticalFlow.cpp.o
-
-src/LK_OpticalFlow.i: src/LK_OpticalFlow.cpp.i
-
-.PHONY : src/LK_OpticalFlow.i
-
-# target to preprocess a source file
-src/LK_OpticalFlow.cpp.i:
-	cd /home/graduationv2/DynamicTracking-LKOpticalFlow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir/build.make LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir/src/LK_OpticalFlow.cpp.i
-.PHONY : src/LK_OpticalFlow.cpp.i
-
-src/LK_OpticalFlow.s: src/LK_OpticalFlow.cpp.s
-
-.PHONY : src/LK_OpticalFlow.s
-
-# target to generate assembly for a file
-src/LK_OpticalFlow.cpp.s:
-	cd /home/graduationv2/DynamicTracking-LKOpticalFlow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir/build.make LKOpticalFlow/CMakeFiles/LK_OpticalFlow.dir/src/LK_OpticalFlow.cpp.s
-.PHONY : src/LK_OpticalFlow.cpp.s
-
 src/LK_OpticalFlow_v2.o: src/LK_OpticalFlow_v2.cpp.o
 
 .PHONY : src/LK_OpticalFlow_v2.o
@@ -1436,33 +1379,6 @@ src/LK_OpticalFlow_v2.cpp.s:
 	cd /home/graduationv2/DynamicTracking-LKOpticalFlow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/LK_OpticalFlow_v2.dir/build.make LKOpticalFlow/CMakeFiles/LK_OpticalFlow_v2.dir/src/LK_OpticalFlow_v2.cpp.s
 .PHONY : src/LK_OpticalFlow_v2.cpp.s
 
-src/point_data.o: src/point_data.cpp.o
-
-.PHONY : src/point_data.o
-
-# target to build an object file
-src/point_data.cpp.o:
-	cd /home/graduationv2/DynamicTracking-LKOpticalFlow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/point_data.dir/build.make LKOpticalFlow/CMakeFiles/point_data.dir/src/point_data.cpp.o
-.PHONY : src/point_data.cpp.o
-
-src/point_data.i: src/point_data.cpp.i
-
-.PHONY : src/point_data.i
-
-# target to preprocess a source file
-src/point_data.cpp.i:
-	cd /home/graduationv2/DynamicTracking-LKOpticalFlow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/point_data.dir/build.make LKOpticalFlow/CMakeFiles/point_data.dir/src/point_data.cpp.i
-.PHONY : src/point_data.cpp.i
-
-src/point_data.s: src/point_data.cpp.s
-
-.PHONY : src/point_data.s
-
-# target to generate assembly for a file
-src/point_data.cpp.s:
-	cd /home/graduationv2/DynamicTracking-LKOpticalFlow/build && $(MAKE) -f LKOpticalFlow/CMakeFiles/point_data.dir/build.make LKOpticalFlow/CMakeFiles/point_data.dir/src/point_data.cpp.s
-.PHONY : src/point_data.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -1472,8 +1388,6 @@ help:
 	@echo "... install/strip"
 	@echo "... install/local"
 	@echo "... edit_cache"
-	@echo "... point_data"
-	@echo "... LK_OpticalFlow"
 	@echo "... tf2_msgs_generate_messages_lisp"
 	@echo "... tf2_msgs_generate_messages_cpp"
 	@echo "... actionlib_msgs_generate_messages_py"
@@ -1557,15 +1471,9 @@ help:
 	@echo "... tf2_msgs_generate_messages_nodejs"
 	@echo "... nodelet_generate_messages_eus"
 	@echo "... bond_generate_messages_nodejs"
-	@echo "... src/LK_OpticalFlow.o"
-	@echo "... src/LK_OpticalFlow.i"
-	@echo "... src/LK_OpticalFlow.s"
 	@echo "... src/LK_OpticalFlow_v2.o"
 	@echo "... src/LK_OpticalFlow_v2.i"
 	@echo "... src/LK_OpticalFlow_v2.s"
-	@echo "... src/point_data.o"
-	@echo "... src/point_data.i"
-	@echo "... src/point_data.s"
 .PHONY : help
 
 
